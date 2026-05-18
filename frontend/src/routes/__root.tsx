@@ -8,8 +8,10 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
+import { Provider as ReduxProvider, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import appCss from "../styles.css?url";
+import { store, persistor } from "@/redux/store";
 
 function NotFoundComponent() {
   return (
@@ -113,9 +115,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GoogleOAuthProvider clientId={ClientId}>
-        <Outlet />
-      </GoogleOAuthProvider>
+       <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <GoogleOAuthProvider clientId={ClientId}>
+            <Outlet />
+          </GoogleOAuthProvider>
+        </PersistGate>
+       </ReduxProvider>
     </QueryClientProvider>
   );
 }

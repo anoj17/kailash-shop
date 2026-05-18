@@ -7,6 +7,8 @@ import { googleLogin, login as loginApi } from "@/api/server";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLoginCredentials } from "@/type/type";
+import { signInRedux } from "@/redux/authSlice";
+import { useDispatch } from "react-redux";
 
 // Extend window to include the Google Identity Services callback
 declare global {
@@ -30,11 +32,8 @@ export function AuthShell({ mode }: { mode: "login" | "signup" | "forgot" }) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const navigate = useNavigate();
-  const googleButtonRef = useRef<HTMLDivElement>(null);
-
-  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const dispatch = useDispatch();
 
   const titles = {
     login: { h: "Welcome back.", s: "Sign in to your Kailash account." },
@@ -58,7 +57,6 @@ export function AuthShell({ mode }: { mode: "login" | "signup" | "forgot" }) {
     }
   };
   const onSuccess = async (credentialResponse: any) => {
-    console.log("Google login success");
     const credential = credentialResponse.credential;
     const decodedToken = jwtDecode(credential);
     const payload = {
@@ -68,6 +66,17 @@ export function AuthShell({ mode }: { mode: "login" | "signup" | "forgot" }) {
       avatar: decodedToken?.picture,
     } as GoogleLoginCredentials
     const res = await googleLogin(payload);
+    
+    if(res && !res.error){
+      const data = {
+        token: res.token,
+        user: res.user
+      }
+      dispatch(signInRedux(res?.data))
+      navigate({ to: "/" });
+    }else{
+      alert(res?.error || res?.response?.data?.error || "Login failed");
+    }
   }
   const onFailure = () => {
     console.log("Google login failed");

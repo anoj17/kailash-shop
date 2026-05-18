@@ -3,6 +3,7 @@ import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
+import { useSelector } from "react-redux";
 
 const nav = [
   { to: "/women", label: "Women" },
@@ -19,6 +20,7 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const { user, isAuthenticated} = useSelector((state:any) => state.auth)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -72,18 +74,38 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <IconBtn label="Search"><Search className="h-4 w-4" /></IconBtn>
+           <IconBtn label="Search"><Search className={`h-4 w-4 cursor-pointer ${user.user.email === "anojbudathoki17@gmail.com" ? "hidden" : "block"}`} /></IconBtn>
+          {
+            user.user.email === "anojbudathoki17@gmail.com" ? (
+              <Link to="/admin" className="text-sm rounded-md px-3 py-2 bg-maroon transition-colors text-white">Dashboard</Link>
+            ) : (
+              <div className="flex items-center gap-1 sm:gap-2">
           <Link to="/wishlist" className="relative p-2 hover:text-maroon transition-colors" aria-label="Wishlist">
-            <Heart className="h-4 w-4" />
+            <Heart className="h-4 w-4 cursor-pointer" />
             <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-maroon text-cream rounded-full h-4 w-4 grid place-items-center">2</span>
           </Link>
           <Link to="/cart" className="relative p-2 hover:text-maroon transition-colors" aria-label="Cart">
-            <ShoppingBag className="h-4 w-4" />
+            <ShoppingBag className="h-4 w-4 cursor-pointer" />
             <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-maroon text-cream rounded-full h-4 w-4 grid place-items-center">1</span>
           </Link>
-          <Link to="/login" className="p-2 hover:text-maroon transition-colors" aria-label="Account">
-            <User className="h-4 w-4" />
-          </Link>
+              </div>
+            )
+          }
+          {
+            user.user.email === "anojbudathoki17@gmail.com" && (
+              <IconBtn label="Search"><Search className={`h-4 w-4 cursor-pointer`} /></IconBtn>
+            )
+          }
+          {
+            isAuthenticated ? (
+              <Link to="/login" className="text-sm rounded-md px-3 py-2 bg-maroon transition-colors text-white"> Login </Link>
+            ) : (
+
+              <Link to="/login" className="relative p-2 hover:text-maroon transition-colors" aria-label="Account">
+                <User className="h-4 w-4 cursor-pointer" />
+              </Link>
+            )
+          }
         </div>
       </div>
 

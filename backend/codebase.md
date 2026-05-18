@@ -29,4 +29,18 @@
  * 
  * EXAMPLE REQUEST LIFECYCLE:
  * Client Request -> index.ts -> Router -> Middleware(Auth) -> Controller -> Prisma(DB) -> Controller -> Client Response
+ * 
+ * --- CURRENT IMPLEMENTED MODULES & FLOW OF WORKS ---
+ * 
+ * 1. Data Models (Prisma):
+ *    - `User`: Stores user info (name, email), hashed passwords, and OAuth fields (googleId, picture).
+ * 
+ * 2. Authentication Flow (`src/routes/auth.ts` -> `src/controller/auth.ts`):
+ *    - POST /register: Checks for existing email, hashes password (bcryptjs), creates user in DB, and issues JWT via HTTP-only cookie.
+ *    - POST /login: Verifies email/password, issues JWT via HTTP-only cookie.
+ *    - POST /google-login: Verifies Google payload, finds or creates user (links Google account if email already exists), issues JWT.
+ * 
+ * 3. Security & Middleware (`src/middleware/middleware.ts`):
+ *    - `protectedRoute`: Intercepts requests to check for `token` in cookies.
+ *    - Verifies JWT, fetches the user from DB, and attaches `req.user` for downstream controllers.
  */
