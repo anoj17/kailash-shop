@@ -8,7 +8,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLoginCredentials } from "@/type/type";
 import { signInRedux } from "@/redux/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Extend window to include the Google Identity Services callback
 declare global {
@@ -34,6 +34,13 @@ export function AuthShell({ mode }: { mode: "login" | "signup" | "forgot" }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isAuthentication } = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    if (isAuthentication) {
+      navigate({ to: "/profile" });
+    }
+  }, [isAuthentication, navigate]);
 
   const titles = {
     login: { h: "Welcome back.", s: "Sign in to your Kailash account." },

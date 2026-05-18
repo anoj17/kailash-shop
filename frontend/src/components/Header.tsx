@@ -20,7 +20,7 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { user, isAuthenticated} = useSelector((state:any) => state.auth)
+  const { user, isAuthentication} = useSelector((state:any) => state.auth)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -74,9 +74,9 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2">
-           <IconBtn label="Search"><Search className={`h-4 w-4 cursor-pointer ${user.user.email === "anojbudathoki17@gmail.com" ? "hidden" : "block"}`} /></IconBtn>
+           <IconBtn label="Search"><Search className={`h-4 w-4 cursor-pointer ${user?.user?.email === "anojbudathoki17@gmail.com" ? "hidden" : "block"}`} /></IconBtn>
           {
-            user.user.email === "anojbudathoki17@gmail.com" ? (
+            user?.user?.email === "anojbudathoki17@gmail.com" ? (
               <Link to="/admin" className="text-sm rounded-md px-3 py-2 bg-maroon transition-colors text-white">Dashboard</Link>
             ) : (
               <div className="flex items-center gap-1 sm:gap-2">
@@ -92,13 +92,13 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
             )
           }
           {
-            user.user.email === "anojbudathoki17@gmail.com" && (
+            user?.user?.email === "anojbudathoki17@gmail.com" && (
               <IconBtn label="Search"><Search className={`h-4 w-4 cursor-pointer`} /></IconBtn>
             )
           }
           {
-            isAuthenticated ? (
-              <Link to="/login" className="text-sm rounded-md px-3 py-2 bg-maroon transition-colors text-white"> Login </Link>
+            !isAuthentication ? (
+              <Link to="/login" className="relative tracking-wide text-sm transition-colors pl-2 hover:text-maroon text-foreground/80"> Login </Link>
             ) : (
 
               <Link to="/login" className="relative p-2 hover:text-maroon transition-colors" aria-label="Account">

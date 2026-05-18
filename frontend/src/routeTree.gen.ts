@@ -15,6 +15,7 @@ import { Route as StoriesRouteImport } from './routes/stories'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MenRouteImport } from './routes/men'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KurthaRouteImport } from './routes/kurtha'
@@ -60,6 +61,11 @@ const SignupRoute = SignupRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MenRoute = MenRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/kurtha': typeof KurthaRoute
   '/login': typeof LoginRoute
   '/men': typeof MenRoute
+  '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/stores': typeof StoresRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/kurtha': typeof KurthaRoute
   '/login': typeof LoginRoute
   '/men': typeof MenRoute
+  '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/stores': typeof StoresRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/kurtha': typeof KurthaRoute
   '/login': typeof LoginRoute
   '/men': typeof MenRoute
+  '/profile': typeof ProfileRoute
   '/shop': typeof ShopRoute
   '/signup': typeof SignupRoute
   '/stores': typeof StoresRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/kurtha'
     | '/login'
     | '/men'
+    | '/profile'
     | '/shop'
     | '/signup'
     | '/stores'
@@ -251,6 +261,7 @@ export interface FileRouteTypes {
     | '/kurtha'
     | '/login'
     | '/men'
+    | '/profile'
     | '/shop'
     | '/signup'
     | '/stores'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/kurtha'
     | '/login'
     | '/men'
+    | '/profile'
     | '/shop'
     | '/signup'
     | '/stores'
@@ -300,6 +312,7 @@ export interface RootRouteChildren {
   KurthaRoute: typeof KurthaRoute
   LoginRoute: typeof LoginRoute
   MenRoute: typeof MenRoute
+  ProfileRoute: typeof ProfileRoute
   ShopRoute: typeof ShopRoute
   SignupRoute: typeof SignupRoute
   StoresRoute: typeof StoresRoute
@@ -351,6 +364,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/men': {
@@ -497,6 +517,7 @@ const rootRouteChildren: RootRouteChildren = {
   KurthaRoute: KurthaRoute,
   LoginRoute: LoginRoute,
   MenRoute: MenRoute,
+  ProfileRoute: ProfileRoute,
   ShopRoute: ShopRoute,
   SignupRoute: SignupRoute,
   StoresRoute: StoresRoute,
